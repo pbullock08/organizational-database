@@ -88,6 +88,9 @@ function showPrompts() {
                 case 'view_roles':
                     viewRoles();
                     break;
+                case 'add_role':
+                    addRole();
+                    break;
                 case 'view_departments':
                     viewDepartments();
                     break;
@@ -111,7 +114,7 @@ function viewEmployees() {
 
 // add employee
 function addEmployee() {
-    
+
     inquirer
         .prompt([
             {
@@ -153,6 +156,42 @@ function viewRoles() {
     })
 };
 
+
+// add role
+function addRole() {
+    inquirer
+        .prompt([
+            {
+                type: 'input',
+                message: 'What is the title of the role?',
+                name: 'title'
+            },
+            {
+                type: 'list',
+                message: 'What is the department related to the role?',
+                name: 'dept_id',
+                choices: []
+            },
+            {
+                type: 'input',
+                message: 'What is the salary of the role?',
+                name: 'salary'
+            },
+        ])
+        .then((r) => {
+            switch(r.dept_id) {
+
+            }
+            // db.query(`INSERT INTO role (title, department_id, salary) VALUES ("${r.title}", '${r.dept_id}', '${r.salary}')`, function (err, results) {
+            // })
+        })
+        .then((results) => {
+            // db.query('SELECT role.id, role.title, department.name AS department, role.salary FROM role JOIN department ON department.id = role.department_id;', function (err, results) {
+            //     console.table(results)
+            // })
+        })
+}
+
 // view all departments
 function viewDepartments() {
     db.query('SELECT * FROM department;', function (err, results) {
@@ -172,15 +211,10 @@ function addDepartment() {
             }
         ])
         .then((d) => {
-            // console.log(d.name);
             db.query(`INSERT INTO department (name) VALUES ("${d.name}")`, function (err, results) {
             })
-        })
-        .then((results) => {
-            db.query('SELECT * FROM department;', function (err, results) {
-                console.table(results)
-                showPrompts()
-            })
+            console.log(`${d.name} added to database.`);
+            showPrompts();
         })
 };
 
