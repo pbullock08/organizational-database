@@ -54,6 +54,10 @@ function showPrompts() {
                         value: 'view_employees_by_dept'
                     },
                     {
+                        name: 'View Total Budget x Department',
+                        value: 'view_salaries_by_dept'
+                    },
+                    {
                         name: 'Add Employee',
                         value: 'add_employee'
                     },
@@ -90,6 +94,10 @@ function showPrompts() {
                         value: 'add_department'
                     },
                     {
+                        name: 'Delete Department',
+                        value: 'delete_dept'
+                    },
+                    {
                         name: 'Quit',
                         value: 'quit'
                     },
@@ -107,6 +115,9 @@ function showPrompts() {
                     break;
                 case 'view_employees_by_dept':
                     viewEmployeesxDept();
+                    break;
+                case 'view_salaries_by_dept':
+                    viewSalariesxDept();
                     break;
                 case 'add_employee':
                     addEmployee();
@@ -135,6 +146,9 @@ function showPrompts() {
                 case 'add_department':
                     addDepartment();
                     break;
+                case 'delete_dept':
+                    deleteDept();
+                    break;
                 default:
                     process.exit();
                     break;
@@ -144,7 +158,7 @@ function showPrompts() {
 
 // view employees 
 function viewEmployees() {
-    db.query('SELECT employee.id, employee.first_name, employee.last_name, role.title, department.name AS department, role.salary, CONCAT(e.first_name," ", e.last_name) AS manager FROM employee JOIN role ON role.id = employee.role_id JOIN department ON department.id = role.department_id LEFT JOIN employee e on employee.manager_id = e.id;', function (err, results) {
+    db.query('SELECT employee.id, employee.first_name, employee.last_name, role.title, department.name AS department, role.salary, CONCAT(e.first_name," ", e.last_name) AS manager FROM employee LEFT JOIN role ON role.id = employee.role_id LEFT JOIN department ON department.id = role.department_id LEFT JOIN employee e on employee.manager_id = e.id;', function (err, results) {
         console.table(results)
         showPrompts()
     })
@@ -163,6 +177,14 @@ function viewEmployeesxDept() {
     db.query('SELECT employee.id, employee.first_name, employee.last_name, role.title, department.name AS department, role.salary, CONCAT(e.first_name," ", e.last_name) AS manager FROM employee JOIN role ON role.id = employee.role_id JOIN department ON department.id = role.department_id LEFT JOIN employee e on employee.manager_id = e.id ORDER BY department', function (err, results) {
         console.table(results)
         showPrompts()
+    })
+};
+
+// view total salaries
+function viewSalariesxDept() {
+    db.query('SELECT department.name AS department, SUM(role.salary) AS total_budget from employee LEFT JOIN role on role_id = employee.role_id LEFT JOIN department on department.id = role.department_id GROUP BY department.name', function (err, results) {
+        console.table(results);
+        showPrompts();
     })
 };
 
@@ -318,7 +340,7 @@ function deleteEmployee() {
 
 // view roles
 function viewRoles() {
-    db.query('SELECT role.id, role.title, department.name AS department, role.salary FROM role JOIN department ON department.id = role.department_id;', function (err, results) {
+    db.query('SELECT role.id, role.title, department.name AS department, role.salary FROM role LEFT JOIN department ON department.id = role.department_id;', function (err, results) {
         console.table(results)
         showPrompts()
     })
@@ -377,7 +399,6 @@ function deleteRole() {
                 },
             ])
             .then((dr) => {
-                console.log(dr)
                 db.query(`DELETE FROM role WHERE id = ${dr.role.id}`, function (err, results) {
                     console.log(`Deleted ${dr.role.title} from database.`);
                     showPrompts();
@@ -412,3 +433,27 @@ function addDepartment() {
         })
 };
 
+// delete department
+function deleteDept() {
+    db.query('SELECT * FROM department', function (err, results) {
+        const deptData = results.map((row) => ({
+            name: row.name,
+            value: row
+        }))
+        inquirer
+            .prompt([
+                {
+                    type: 'list',
+                    message: 'Which department do you want to delete?',
+                    name: 'dept',
+                    choices: deptData
+                },
+            ])
+            .then((dd) => {
+                db.query(`DELETE FROM department WHERE id = ${dd.dept.id}`, function (err, results) {
+                    console.log(`Deleted ${dd.dept.name} from database.`);
+                    showPrompts();
+                })
+            })
+    })
+};
