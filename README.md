@@ -23,5 +23,5 @@
   This application is licensed under the [MIT license.](https://github.com/git/git-scm.com/blob/main/MIT-LICENSE.txt)
 
   ## Video Walkthrough
-  https://github.com/pbullock08/organizational-database/assets/126013657/b5b27217-f29c-4331-a7ef-5c3891e6b545
+  https://github.com/pbullock08/organizational-database/assets/126013657/4780cba9-3e8f-48cb-883b-0327d2980559
 
