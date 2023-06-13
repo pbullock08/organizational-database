@@ -182,7 +182,7 @@ function viewEmployeesxDept() {
 
 // view total salaries
 function viewSalariesxDept() {
-    db.query('SELECT department.name AS department, SUM(role.salary) AS total_budget from employee LEFT JOIN role on role_id = employee.role_id LEFT JOIN department on department.id = role.department_id GROUP BY department.name', function (err, results) {
+    db.query('SELECT department.name AS department, SUM(role.salary) AS total_budget from employee LEFT JOIN role on role.id = employee.role_id LEFT JOIN department on department.id = role.department_id GROUP BY department.name', function (err, results) {
         console.table(results);
         showPrompts();
     })
@@ -230,8 +230,9 @@ function addEmployee() {
                     },
                 ])
                 .then((e) => {
-                    console.log(e);
-                    db.query(`INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES ('${e.employee_fn}', '${e.employee_ln}', '${e.role_id.id}', '${e.manager_id.id}')`, function (err, results) {
+                    // console.log(e);
+                    // console.log(e.manager_id.id);
+                    db.query(`INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES ('${e.employee_fn}', '${e.employee_ln}', '${e.role_id.id}', ${e.manager_id.id})`, function (err, results) {
                         console.log(`${e.employee_fn} ${e.employee_ln} added to database.`);
                         showPrompts();
                     })

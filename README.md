@@ -8,7 +8,7 @@
  * [Installation](#installation) 
  * [Usage](#usage) 
  * [License](#license) 
- * [Video Walkthrough](#video_walkthrough) 
+ * [Video Walkthrough](#video-walkthrough) 
 
   ## Installation
 
@@ -20,8 +20,8 @@
 
   ## License 
 
-This application is licensed under the [MIT license.](https://github.com/git/git-scm.com/blob/main/MIT-LICENSE.txt)
+  This application is licensed under the [MIT license.](https://github.com/git/git-scm.com/blob/main/MIT-LICENSE.txt)
 
   ## Video Walkthrough
-https://github.com/pbullock08/organizational-database/assets/126013657/b5b27217-f29c-4331-a7ef-5c3891e6b545
+  https://github.com/pbullock08/organizational-database/assets/126013657/b5b27217-f29c-4331-a7ef-5c3891e6b545
 
